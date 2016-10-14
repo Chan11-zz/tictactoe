@@ -34,7 +34,8 @@ class App extends React.Component {
         }
         update(number) {
 
-            if (this.state.bool) {
+            if(this.display(number)){
+                if (this.state.bool) {
                 //console.log("in update & player is ", this.state.player);
                 this.display(number);
                 this.setState({ player: 'o', bool: false });
@@ -52,7 +53,11 @@ class App extends React.Component {
             });
             //console.log(this.state.b);
 
-            this.displayWinner();
+            this.displayWinner();    
+            }
+            else{
+                return
+            }
         }
 
         displayWinner() {
