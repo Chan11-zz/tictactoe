@@ -22,6 +22,11 @@ class App extends React.Component {
             this.checkWinner = this.checkWinner.bind(this);
             this.displayWinner = this.displayWinner.bind(this);
             this.reset = this.reset.bind(this);
+            this.selection=this.selection.bind(this);
+        }
+        selection(player) {
+           (player=="x")?this.setState({player: player,bool:true}) : this.setState({player: player,bool:false});
+           document.getElementById("playerselection").style.display="none";
         }
         display(id) {
             this.state.track.push(id)
@@ -62,7 +67,7 @@ class App extends React.Component {
 
         displayWinner() {
             var winner = this.checkWinner();
-            (winner == 10) ? this.setState({ winner: 'X' }): (winner == -10) ? this.setState({ winner: '0' }) : null;
+             (winner==10) ? this.setState({ winner:'X Wins' }): (winner==-10) ? this.setState({ winner: '0 Wins' }) : (winner==0 & this.state.track.length==9 ) ? this.setState({winner:'Draw'}) : null ;
         }
         reset() {
             this.state.track.map(function(item) {
@@ -80,6 +85,7 @@ class App extends React.Component {
                 bool: true,
                 track: []
             });
+	    document.getElementById("playerselection").style.display="initial";
         }
         findRow(number) {
             var row;
@@ -165,20 +171,28 @@ class App extends React.Component {
                 else if (this.state.b[0][2] == 'o')
                     return -10;
             }
-
+	    return 0;
         }
 
 //
 	render() {
+		var winner,one,two;
 		var creator=[0,3,6].map(function(item,index){
 			return <Table number={item} key={index} update={this.update} player={this.state.player}/>
 		}.bind(this));
-		var winner;
+		if(this.state.player=='x'){
+            		one="X"; two='O'
+        	}
+		else{
+           		one='O'; two='X';
+       	 	}
 		(this.state.winner) ? winner='Winner:"'+ this.state.winner +'"' : winner=""
 		return (
 			<div>
 			<div id="heading">Tic Tac Toe</div>
-			<div id="selection"><p>Player 1: "X" , Player 2: "O"</p></div>
+            		<div id="playerselection">Select Player<button id="xSelectButton" onClick={()=>this.selection("x")}>X</button>
+            		<button id="ySelectButton" onClick={()=>this.selection("o")}>O</button></div>
+			<div id="selection"><p>Playing: {one} , Waiting: {two}</p></div>
 			<table>
 				<tbody>
 					{creator}
